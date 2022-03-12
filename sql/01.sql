@@ -10,3 +10,22 @@
  * NOTE:
  * Your results should not contain any duplicate titles.
  */
+
+SELECT title
+FROM film WHERE title NOT LIKE '%F%'
+
+EXCEPT
+
+SELECT DISTINCT title FROM film
+	JOIN film_actor USING (film_id)
+	JOIN actor USING (actor_id)
+WHERE first_name LIKE '%F%' OR last_name LIKE '%F%'
+
+EXCEPT
+
+SELECT DISTINCT title
+FROM film
+	JOIN inventory USING (film_id)
+	JOIN rental USING (inventory_id)
+	JOIN customer USING (customer_id)
+WHERE first_name LIKE '%F%' OR last_name LIKE '%F%';

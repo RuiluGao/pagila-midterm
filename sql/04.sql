@@ -15,3 +15,20 @@
  * NOTE:
  * You do not have to include movies with similarity score 0 in your results (but you may if you like).
  */
+
+SELECT title, count(*) as similarity_score
+FROM film
+	JOIN inventory USING (film_id)
+	JOIN rental USING (inventory_id)
+	JOIN customer USING (customer_id)
+WHERE
+	customer_id IN (
+		SELECT DISTINCT customer_id
+		FROM film
+			JOIN inventory USING (film_id)
+			JOIN rental USING (inventory_id)
+			JOIN customer USING (customer_id)
+		WHERE title = 'AMERICAN CIRCUS')
+	AND title != 'AMERICAN CIRCUS'
+GROUP BY title
+ORDER BY similarity_score DESC;
